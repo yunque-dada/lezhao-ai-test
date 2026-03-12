@@ -5,6 +5,106 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Scratch3 在线编程 - 乐造AI</title>
+  <link rel="stylesheet" href="css/scratch.css" />
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.cokie.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    // Scratch 配置 - 必须在 lib.min.js 之前定义
+    window.scratchConfig = {
+      session: {
+        token: "",
+        username: "访客"
+      },
+      backpack: {
+        enable: false
+      },
+      cloudData: {
+        enable: false
+      },
+      projectInfo: {
+        projectName: "我的第一个项目",
+        authorUsername: "访客",
+        authorAvatar: './static/avatar.png'
+      },
+      logo: {
+        show: true,
+        url: "./static/logo.png",
+        handleClickLogo: function() {
+          window.location.href = '../index.html';
+        }
+      },
+      menuBar: {
+        style: {
+          background: 'hsla(215, 100%, 65%, 1)'
+        },
+        languageButton: {
+          show: true,
+          defaultLanguage: 'zh-cn'
+        },
+        newButton: {
+          show: true
+        },
+        loadFileButton: {
+          show: true
+        },
+        saveFileButton: {
+          show: true
+        },
+        turboModeButton: {
+          show: true
+        },
+        helpButton: {
+          show: true
+        },
+        myStuff: {
+          show: false
+        },
+        userAvatar: {
+          show: true,
+          username: '访客',
+          avatar: './static/avatar.png'
+        },
+        customButtons: []
+      },
+      blocks: {
+        scale: 0.8
+      },
+      stageArea: {
+        fullscreenButton: {
+          show: true
+        },
+        startButton: {
+          show: true
+        },
+        stopButton: {
+          show: true
+        }
+      },
+      handleVmInitialized: function(vm) {
+        window.vm = vm;
+        console.log("Scratch VM 初始化完成");
+        document.getElementById('loading').classList.add('hidden');
+      },
+      handleProjectLoaded: function() {
+        console.log("项目加载完成");
+      },
+      handleDefaultProjectLoaded: function() {
+        console.log("默认项目加载完成");
+        document.getElementById('loading').classList.add('hidden');
+      },
+      defaultProjectURL: "./static/project.sb3",
+      assets: {
+        assetHost: './static',
+        defaultIndex: {
+          sprites: "./static/json_index/sprites.json",
+          costumes: "./static/json_index/costumes.json",
+          backdrops: "./static/json_index/backdrops.json",
+          sounds: "./static/json_index/sounds.json"
+        }
+      }
+    };
+  </script>
   <style>
     * {
       margin: 0;
@@ -26,51 +126,55 @@
     .header h1 {
       font-size: 24px;
     }
-    .header .btn {
-      background: rgba(255,255,255,0.2);
-      padding: 8px 20px;
-      border-radius: 20px;
-      cursor: pointer;
-      margin-left: 10px;
-      border: none;
-      color: white;
-      font-size: 14px;
-    }
-    .header .btn:hover {
-      background: rgba(255,255,255,0.3);
-    }
-    #iframe-container {
+    #scratch {
       width: 100%;
       height: calc(100vh - 60px);
     }
-    iframe {
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      border: none;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+      z-index: 9999;
+    }
+    .loading.hidden {
+      display: none;
+    }
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 
 <body>
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <p style="margin-top: 20px;">正在加载 Scratch3 编辑器...</p>
+  </div>
+
   <div class="header">
     <h1>🧩 Scratch3 在线编程 - 乐造AI</h1>
-    <div>
-      <button class="btn" onclick="goHome()">🏠 返回首页</button>
-    </div>
   </div>
 
-  <div id="iframe-container">
-    <iframe src="https://scratch.mit.edu/projects/editor/?utm_campaign=projects&utm_source=mitsite&utm_medium=navbar" 
-            allowtransparency="true" 
-            allowfullscreen>
-    </iframe>
-  </div>
+  <div id="scratch"></div>
 
-  <script>
-    function goHome() {
-      window.location.href = '../index.html';
-    }
-  </script>
+  <script src="lib.min.js"></script>
+  <script src="chunks/gui.js"></script>
 </body>
 
 </html>
