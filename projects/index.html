@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐造AI项目管理中心</title>
+    <meta name="description" content="乐造AI项目管理系统 - 一站式管理所有项目">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-soft: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --light: #f8fafc;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', 'Outfit', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        /* Filter */
+        .filter-bar {
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: var(--white);
+            color: var(--gray);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Projects Grid */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .project-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.15);
+        }
+        
+        .project-header {
+            padding: 1.25rem;
+            background: var(--dark-soft);
+            color: white;
+        }
+        
+        .project-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .project-type {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .project-body {
+            padding: 1.25rem;
+        }
+        
+        .project-desc {
+            color: var(--gray);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            min-height: 40px;
+        }
+        
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            background: var(--light);
+            color: var(--gray);
+        }
+        
+        .tag.official { background: #dbeafe; color: #1d4ed8; }
+        .tag.test { background: #fef3c7; color: #b45309; }
+        .tag.internal { background: #fce7f3; color: #be185d; }
+        
+        .project-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--gray);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.5rem; }
+            .stats { gap: 1rem; }
+            .stat-number { font-size: 1.5rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🎯 乐造AI项目管理中心</h1>
+        <p>一站式管理所有项目 | 乐造AI研发团队</p>
+    </header>
+    
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-number" id="total-projects">0</div>
+            <div class="stat-label">项目总数</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="official-projects">0</div>
+            <div class="stat-label">正式项目</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="test-projects">0</div>
+            <div class="stat-label">测试项目</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="internal-projects">0</div>
+            <div class="stat-label">内部项目</div>
+        </div>
+    </div>
+    
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="official">正式项目</button>
+        <button class="filter-btn" data-filter="test">测试项目</button>
+        <button class="filter-btn" data-filter="internal">内部项目</button>
+    </div>
+    
+    <div class="container">
+        <div class="projects-grid" id="projects-grid">
+            <!-- Projects will be rendered here -->
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 乐造AI | 项目管理系统 | 最后更新：2026-03-14</p>
+    </footer>
+    
+    <script>
+        const projects = [
+            {
+                name: "乐造AI官网",
+                shortName: "lezao-website",
+                type: "official",
+                desc: "乐造AI少儿编程培训机构官方网站，展示课程、师资、联系方式",
+                tech: ["HTML5", "CSS3", "JavaScript"],
+                github: "https://github.com/yunque-dada/lezhao-ai",
+                demo: "https://yunque-dada.github.io/lezhao-ai-test/",
+                status: "活跃"
+            },
+            {
+                name: "乐造内部手册",
+                shortName: "lezao-manual-web",
+                type: "internal",
+                desc: "员工内部培训话术手册，包含课程顾问实战话术",
+                tech: ["HTML", "JavaScript", "data.js"],
+                github: "https://github.com/yunque-dada/lezao-manual-web",
+                demo: "https://yunque-dada.github.io/lezao-manual-web/",
+                status: "活跃"
+            },
+            {
+                name: "老师培训平台",
+                shortName: "lezao-teacher-training",
+                type: "internal",
+                desc: "乐高/编程老师培训系统，包含零件知识、教学资源",
+                tech: ["HTML5", "CSS3", "JavaScript"],
+                github: "https://github.com/yunque-dada/lezhao-teacher-training",
+                demo: "https://yunque-dada.github.io/lezao-teacher-training/",
+                status: "活跃"
+            },
+            {
+                name: "测试网站v2",
+                shortName: "lezao-test-v2",
+                type: "test",
+                desc: "官网测试版本v2，用于新功能测试",
+                tech: ["HTML", "CSS"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "测试网站",
+                shortName: "lezao-test-site",
+                type: "test",
+                desc: "早期测试用的临时站点",
+                tech: ["HTML"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "测试提取",
+                shortName: "lezao-test-extract",
+                type: "test",
+                desc: "数据提取测试项目",
+                tech: ["Python"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "官网测试",
+                shortName: "lezao-website-test",
+                type: "test",
+                desc: "乐造官网测试分支",
+                tech: ["HTML", "CSS", "JS"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "新官网测试",
+                shortName: "lezao-website-test-new",
+                type: "test",
+                desc: "新官网功能测试",
+                tech: ["HTML", "CSS"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "内部手册",
+                shortName: "lezhao-internal-manual",
+                type: "internal",
+                desc: "早期内部培训手册",
+                tech: ["HTML"],
+                github: "",
+                demo: "",
+                status: "已停用"
+            },
+            {
+                name: "鱼Goofish监控",
+                shortName: "ai-goofish-monitor-master",
+                type: "official",
+                desc: "AI鱼监控项目（Goofish数据监控）",
+                tech: ["Python", "AI"],
+                github: "",
+                demo: "",
+                status: "维护中"
+            }
+        ];
+        
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' 
+                ? projects 
+                : projects.filter(p => p.type === filter);
+            
+            filtered.forEach(p => {
+                const tags = p.tech.map(t => `<span class="tag">${t}</span>`).join('');
+                const typeClass = p.type === 'official' ? 'official' : p.type === 'test' ? 'test' : 'internal';
+                
+                const demoLink = p.demo 
+                    ? `<a href="${p.demo}" target="_blank" class="btn btn-primary">在线预览</a>` 
+                    : `<span class="btn btn-secondary" style="opacity:0.5">无</span>`;
+                
+                const githubLink = p.github 
+                    ? `<a href="${p.github}" target="_blank" class="btn btn-secondary">GitHub</a>` 
+                    : `<span class="btn btn-secondary" style="opacity:0.5">无</span>`;
+                
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="project-header">
+                        <div class="project-name">
+                            <span>📁</span>
+                            ${p.name}
+                        </div>
+                        <div class="project-type">${p.shortName}</div>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-desc">${p.desc}</p>
+                        <div class="project-tags">
+                            <span class="tag ${typeClass}">${p.type === 'official' ? '正式' : p.type === 'test' ? '测试' : '内部'}</span>
+                            <span class="tag">${p.status}</span>
+                            ${tags}
+                        </div>
+                        <div class="project-links">
+                            ${demoLink}
+                            ${githubLink}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Update stats
+            document.getElementById('total-projects').textContent = projects.length;
+            document.getElementById('official-projects').textContent = projects.filter(p => p.type === 'official').length;
+            document.getElementById('test-projects').textContent = projects.filter(p => p.type === 'test').length;
+            document.getElementById('internal-projects').textContent = projects.filter(p => p.type === 'internal').length;
+        }
+        
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderProjects(btn.dataset.filter);
+            });
+        });
+        
+        // Initial render
+        renderProjects();
+    </script>
+</body>
+</html>
