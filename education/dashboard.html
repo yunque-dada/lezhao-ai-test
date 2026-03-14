@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作台 - 乐造AI教务平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --dark-soft: #1e293b;
+            --gray: #64748b;
+            --gray-light: #94a3b8;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+        }
+        
+        /* 顶部导航 */
+        .navbar {
+            background: var(--white);
+            padding: 1rem 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .navbar .user-name {
+            font-weight: 500;
+        }
+        
+        .navbar .role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .role-teacher {
+            background: #eef2ff;
+            color: var(--primary);
+        }
+        
+        .role-student {
+            background: #d1fae5;
+            color: var(--success);
+        }
+        
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e2e8f0;
+            background: var(--white);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: var(--light);
+        }
+        
+        /* 主内容 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        /* 欢迎区域 */
+        .welcome {
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .welcome h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome p {
+            opacity: 0.9;
+        }
+        
+        /* 统计卡片 */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-card .label {
+            color: var(--gray);
+            font-size: 0.875rem;
+        }
+        
+        /* 区块 */
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background: var(--light);
+            color: var(--gray);
+            border: 1px solid #e2e8f0;
+        }
+        
+        /* 课程列表 */
+        .course-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .course-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .course-item:hover {
+            border-color: var(--primary-light);
+            background: #f8fafc;
+        }
+        
+        .course-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+        
+        .course-info {
+            flex: 1;
+        }
+        
+        .course-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .course-meta {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        /* 学生作品列表 */
+        .work-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .work-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .work-info {
+            flex: 1;
+        }
+        
+        .work-title {
+            font-weight: 500;
+        }
+        
+        .work-meta {
+            font-size: 0.875rem;
+            color: var(--gray);
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-draft {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        
+        .status-submitted {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+        
+        .status-reviewed {
+            background: #d1fae5;
+            color: #059669;
+        }
+        
+        /* 空状态 */
+        .empty {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="logo">🎓 乐造AI教务平台</div>
+        <div class="user-info">
+            <span class="user-name" id="userName"></span>
+            <span class="role-badge" id="roleBadge"></span>
+            <button class="btn-logout" onclick="handleLogout()">退出</button>
+        </div>
+    </nav>
+    
+    <!-- 主内容 -->
+    <div class="container">
+        <!-- 欢迎区域 -->
+        <div class="welcome">
+            <h2 id="welcomeTitle">欢迎回来！</h2>
+            <p id="welcomeDesc">今天是学习的一天~</p>
+        </div>
+        
+        <!-- 老师视图 -->
+        <div id="teacherView" style="display: none;">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="number">25</div>
+                    <div class="label">学生数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">3</div>
+                    <div class="label">班级数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">87</div>
+                    <div class="label">作品数</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">📚 我的课程</h3>
+                    <button class="btn btn-primary">新建课程</button>
+                </div>
+                <div class="course-list">
+                    <div class="course-item">
+                        <div class="course-icon">🔷</div>
+                        <div class="course-info">
+                            <div class="course-name">Scratch基础第一课</div>
+                            <div class="course-meta">3个班级 · 25学生</div>
+                        </div>
+                        <button class="btn btn-secondary">管理</button>
+                    </div>
+                    <div class="course-item">
+                        <div class="course-icon">🔷</div>
+                        <div class="course-info">
+                            <div class="course-name">Scratch基础第二课</div>
+                            <div class="course-meta">3个班级 · 25学生</div>
+                        </div>
+                        <button class="btn btn-secondary">管理</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">📂 班级管理</h3>
+                    <button class="btn btn-primary">新建班级</button>
+                </div>
+                <div class="course-list">
+                    <div class="course-item">
+                        <div class="course-icon">🎓</div>
+                        <div class="course-info">
+                            <div class="course-name">Scratch基础班</div>
+                            <div class="course-meta">25学生 · 3个课程</div>
+                        </div>
+                        <button class="btn btn-secondary">管理</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学生视图 -->
+        <div id="studentView" style="display: none;">
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">📚 今日课程</h3>
+                </div>
+                <div class="course-list">
+                    <div class="course-item">
+                        <div class="course-icon">🔷</div>
+                        <div class="course-info">
+                            <div class="course-name">Scratch基础第一课：让角色动起来</div>
+                            <div class="course-meta">老师：张老师 · 45分钟</div>
+                        </div>
+                        <button class="btn btn-primary">开始学习</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h3 class="section-title">📝 我的作品</h3>
+                    <button class="btn btn-secondary">查看全部</button>
+                </div>
+                <div class="work-list">
+                    <div class="work-item">
+                        <div class="course-icon">🎨</div>
+                        <div class="work-info">
+                            <div class="work-title">我的第一个作品</div>
+                            <div class="work-meta">2024-01-15 · Scratch</div>
+                        </div>
+                        <span class="status-badge status-reviewed">已完成</span>
+                    </div>
+                    <div class="work-item">
+                        <div class="course-icon">🎨</div>
+                        <div class="work-info">
+                            <div class="work-title">猫捉老鼠</div>
+                            <div class="work-meta">2024-01-15 · Scratch</div>
+                        </div>
+                        <span class="status-badge status-draft">草稿</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        // 检查登录状态
+        function checkAuth() {
+            const auth = Storage.getAuth();
+            if (!auth) {
+                location.href = 'index.html';
+                return null;
+            }
+            return auth;
+        }
+        
+        // 渲染页面
+        function render(auth) {
+            // 用户信息
+            document.getElementById('userName').textContent = auth.name;
+            
+            const roleBadge = document.getElementById('roleBadge');
+            if (auth.role === 'teacher') {
+                roleBadge.textContent = '👨‍🏫 老师';
+                roleBadge.className = 'role-badge role-teacher';
+                document.getElementById('teacherView').style.display = 'block';
+                document.getElementById('welcomeTitle').textContent = `欢迎回来，${auth.name}老师！`;
+            } else {
+                roleBadge.textContent = '👨‍🎓 学生';
+                roleBadge.className = 'role-badge role-student';
+                document.getElementById('studentView').style.display = 'block';
+                document.getElementById('welcomeTitle').textContent = `欢迎回来，${auth.name}！`;
+            }
+            
+            // 欢迎描述
+            const now = new Date();
+            const hour = now.getHours();
+            let desc = '';
+            if (hour < 12) desc = '早上好！今天也要认真学习哦~';
+            else if (hour < 18) desc = '下午好！继续加油~';
+            else desc = '晚上好！今天学到了什么？';
+            document.getElementById('welcomeDesc').textContent = desc;
+        }
+        
+        // 退出登录
+        function handleLogout() {
+            if (confirm('确定要退出登录吗？')) {
+                Storage.clearAuth();
+                location.href = 'index.html';
+            }
+        }
+        
+        // 初始化
+        window.onload = function() {
+            const auth = checkAuth();
+            if (auth) {
+                render(auth);
+            }
+        };
+    </script>
+</body>
+</html>
