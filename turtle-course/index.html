@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神奇的万花筒——Python海龟画图课程</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1e1b4b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .turtle-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .section-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .code-block {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .code-block pre {
+            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+        }
+        
+        .code-block .keyword { color: #c084fc; }
+        .code-block .string { color: #34d399; }
+        .code-block .number { color: #f472b6; }
+        .code-block .comment { color: #64748b; }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 12px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.1rem;
+        }
+        
+        .feature-list li::before {
+            content: '★';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .color-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        .kaleidoscope-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin: 20px auto;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spiral {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #ff6b6b);
+            animation: spin 10s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg) scale(0.5); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-ppt {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        .nav-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .target-audience {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        
+        .challenge-box {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2));
+            border: 2px solid var(--accent);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .param-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .param-item:last-child {
+            border-bottom: none;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: rgba(0,0,0,0.3);
+            margin-top: 60px;
+        }
+        
+        .page-flow {
+            counter-reset: section;
+        }
+        
+        .page-flow .section-card {
+            counter-increment: section;
+        }
+        
+        .page-flow .section-card::before {
+            content: counter(section);
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- 封面 -->
+    <section class="hero">
+        <div class="container">
+            <div class="turtle-icon">🐢</div>
+            <h1>神奇的万花筒</h1>
+            <p class="subtitle">用Python画出炫彩图案 —— Python海龟画图进阶课程</p>
+            <div class="target-audience">
+                <i class="bi bi-people"></i> 适合年级：小学3～6年级
+            </div>
+        </div>
+    </section>
+
+    <div class="container page-flow">
+        <!-- 第2页：课程目标 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">2</span>今天我们要学什么？</h2>
+                <ul class="feature-list">
+                    <li>回顾海龟画图的基本命令</li>
+                    <li>学会用for循环重复画图</li>
+                    <li>学会用random模块让颜色随机变化</li>
+                    <li>学会用旋转和大小变化创造炫酷效果</li>
+                    <li>自己动手设计独一无二的万花筒图案！</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 第3页：导入 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">3</span>你玩过万花筒吗？</h2>
+                <p style="font-size: 1.2rem; line-height: 1.8;">
+                    万花筒是一种光学玩具，里面有多彩的图案。<br>
+                    转动万花筒，图案会不断变化，非常漂亮！<br><br>
+                    <strong>今天我们就要用Python来创造数字万花筒！</strong>
+                </p>
+                <div class="kaleidoscope-preview">
+                    <div class="spiral"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第4页：准备工作 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">4</span>让我们开始吧！</h2>
+                <p style="font-size: 1.1rem;">打开Python（IDLE或Thonny），导入需要的模块</p>
+                <div class="code-block">
+<pre><span class="keyword">import</span> turtle
+<span class="keyword">import</span> random
+
+t = turtle.Turtle()
+t.<span class="keyword">speed</span>(<span class="number">0</span>)
+turtle.bgcolor(<span class="string">"black"</span>)
+t.pensize(<span class="number">2</span>)</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第5页：准备颜色列表 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">5</span>五颜六色的画笔</h2>
+                <p style="font-size: 1.1rem;">创建一个颜色列表，让程序可以从里面随机挑选颜色</p>
+                <div class="code-block">
+<pre>colors = [<span class="string">"red"</span>, <span class="string">"orange"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>, 
+          <span class="string">"purple"</span>, <span class="string">"pink"</span>, <span class="string">"cyan"</span>, <span class="string">"magenta"</span>]</pre>
+                </div>
+                <div class="color-palette">
+                    <div class="color-box" style="background: #ef4444; color: white;">red</div>
+                    <div class="color-box" style="background: #f97316; color: white;">orange</div>
+                    <div class="color-box" style="background: #eab308; color: black;">yellow</div>
+                    <div class="color-box" style="background: #22c55e; color: white;">green</div>
+                    <div class="color-box" style="background: #3b82f6; color: white;">blue</div>
+                    <div class="color-box" style="background: #a855f7; color: white;">purple</div>
+                    <div class="color-box" style="background: #ec4899; color: white;">pink</div>
+                    <div class="color-box" style="background: #06b6d4; color: white;">cyan</div>
+                    <div class="color-box" style="background: #d946ef; color: white;">magenta</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第6页：画正八边形 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">6</span>先画一个简单的图形</h2>
+                <p style="font-size: 1.1rem;">正八边形有8条边，每次右转45度，边长100像素</p>
+                <div class="code-block">
+<pre><span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
+    t.forward(<span class="number">100</span>)
+    t.right(<span class="number">45</span>)</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第7页：让颜色随机变化 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">7</span>给图形穿上彩色外衣</h2>
+                <p style="font-size: 1.1rem;">每次画边之前，从颜色列表中随机选一个颜色</p>
+                <div class="code-block">
+<pre><span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
+    t.color(random.choice(colors))
+    t.forward(<span class="number">100</span>)
+    t.right(<span class="number">45</span>)</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第8页：旋转整体图案 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">8</span>转起来！变成万花筒</h2>
+                <p style="font-size: 1.1rem;">画完一个八边形后，将海龟旋转一个小角度（比如10度），再画下一个八边形</p>
+                <div class="code-block">
+<pre><span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">36</span>):
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
+        t.color(random.choice(colors))
+        t.forward(<span class="number">100</span>)
+        t.right(<span class="number">45</span>)
+    t.right(<span class="number">10</span>)</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第9页：改变大小 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">9</span>让图案有层次感</h2>
+                <p style="font-size: 1.1rem;">每次画完一圈，把边长增加一点点，形成螺旋上升的效果</p>
+                <div class="code-block">
+<pre>size = <span class="number">50</span>
+<span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">30</span>):
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
+        t.color(random.choice(colors))
+        t.forward(size)
+        t.right(<span class="number">45</span>)
+    t.right(<span class="number">15</span>)
+    size = size + <span class="number">3</span></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第10页：完整代码 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">10</span>一起来运行吧！</h2>
+                <p style="font-size: 1.1rem;">这是我们这节课的最终代码（可以直接复制运行）</p>
+                <div class="code-block">
+<pre><span class="keyword">import</span> turtle
+<span class="keyword">import</span> random
+
+t = turtle.Turtle()
+t.<span class="keyword">speed</span>(<span class="number">0</span>)
+turtle.bgcolor(<span class="string">"black"</span>)
+t.pensize(<span class="number">2</span>)
+
+colors = [<span class="string">"red"</span>, <span class="string">"orange"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>, 
+          <span class="string">"purple"</span>, <span class="string">"pink"</span>, <span class="string">"cyan"</span>, <span class="string">"magenta"</span>]
+
+size = <span class="number">20</span>
+<span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">72</span>):
+    t.color(random.choice(colors))
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">30</span>):
+        t.forward(size)
+        t.right(<span class="number">91</span>)
+        size += <span class="number">1</span>
+    t.right(<span class="number">5</span>)
+
+t.hideturtle()
+turtle.done()</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第11页：互动活动 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">11</span>变身小小艺术家</h2>
+                <div class="challenge-box">
+                    <h4>修改下面这些参数，看看图案有什么变化：</h4>
+                    <div class="param-item">
+                        <strong>外循环次数：</strong> 72 → 36 或 120
+                    </div>
+                    <div class="param-item">
+                        <strong>内循环次数：</strong> 30 → 10 或 50
+                    </div>
+                    <div class="param-item">
+                        <strong>旋转角度：</strong> 5 → 10 或 2
+                    </div>
+                    <div class="param-item">
+                        <strong>颜色列表：</strong> 添加自己喜欢的颜色
+                    </div>
+                </div>
+                <p style="font-size: 1.1rem;">和同桌比一比，谁画出的图案最漂亮！</p>
+            </div>
+        </section>
+
+        <!-- 第12页：作品展示 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">12</span>展示你的万花筒</h2>
+                <ul class="feature-list">
+                    <li>运行你的程序，保存截图</li>
+                    <li>向大家介绍你的作品：用了哪些颜色？改了哪些参数？</li>
+                    <li>说说你最喜欢的地方</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 第13页：课程总结 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">13</span>今天我们学会了……</h2>
+                <ul class="feature-list">
+                    <li>用循环画出重复图案</li>
+                    <li>用随机数让颜色多变</li>
+                    <li>通过旋转和大小变化创造动态效果</li>
+                    <li><strong>编程不仅能解决问题，还能创作艺术！</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 第14页：课后作业 -->
+        <section class="section">
+            <div class="section-card">
+                <h2 class="section-title"><span class="section-number">14</span>课后可以继续探索</h2>
+                <div class="challenge-box">
+                    <h4>🌈 颜色渐变</h4>
+                    <p>试试不用随机，而是让颜色按顺序变化（用列表索引）</p>
+                    
+                    <h4>🔷 图形变形</h4>
+                    <p>把正八边形改成五边形或圆形，会是什么效果？</p>
+                    
+                    <h4>📝 家庭作业</h4>
+                    <p>修改代码，创作一幅"送给妈妈的万花筒"或"星空万花筒"</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 第15页：结束页 -->
+        <section class="section">
+            <div class="section-card" style="text-align: center;">
+                <div class="turtle-icon" style="width: 100px; height: 100px; font-size: 50px; margin: 0 auto 20px;">🐢</div>
+                <h2 class="section-title">谢谢大家！</h2>
+                <p class="subtitle" style="font-size: 1.3rem;">期待你们的创意作品</p>
+                <div style="margin-top: 30px;">
+                    <span class="badge bg-light text-dark fs-6 me-2">Q&A环节</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>🎨 Python海龟画图进阶课程 | 乐造AI</p>
+        </div>
+    </footer>
+
+    <div class="nav-buttons">
+        <button class="nav-btn btn-ppt" onclick="downloadPPT()" title="下载PPT">
+            <i class="bi bi-file-earmark-ppt"></i>
+        </button>
+        <button class="nav-btn btn-download" onclick="downloadHTML()" title="下载网页">
+            <i class="bi bi-download"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function downloadHTML() {
+            alert('网页已打开，可以直接保存为HTML文件！\n\n方法：Ctrl+S 保存网页');
+        }
+        
+        function downloadPPT() {
+            alert('正在生成PPT，请稍候...\n\n如需PPT，可使用以下工具：\n1. python-pptx 库\n2. WPS/Office 打开网页后另存为PPT\n3. 使用在线转换工具');
+        }
+    </script>
+</body>
+</html>
