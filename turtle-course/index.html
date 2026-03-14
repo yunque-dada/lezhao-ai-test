@@ -8,97 +8,205 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #ec4899;
-            --dark: #1e1b4b;
-            --light: #f8fafc;
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #059669;
+            --accent: #dc2626;
+            --warning: #d97706;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-code: #1e293b;
+            --text-main: #1e293b;
+            --text-light: #64748b;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
+        * { box-sizing: border-box; }
+        
         body {
-            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--dark) 0%, #312e81 100%);
-            min-height: 100vh;
+            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        
+        .top-nav {
+            background: var(--primary);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 10px;
+        }
+        
+        .progress-bar-custom {
+            background: #fbbf24;
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .page-nav {
+            position: fixed;
+            left: 0;
+            top: 80px;
+            width: 200px;
+            height: calc(100vh - 80px);
+            background: var(--bg-card);
+            border-right: 1px solid #e2e8f0;
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 50;
+        }
+        
+        .page-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+        
+        .page-nav-item:hover { background: #f1f5f9; color: var(--primary); }
+        
+        .page-nav-item.active {
+            background: #eff6ff;
+            color: var(--primary);
+            border-left-color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .page-nav-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .page-nav-item.active .page-nav-number {
+            background: var(--primary);
             color: white;
         }
         
-        .hero {
-            padding: 80px 0;
-            text-align: center;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        .main-content {
+            margin-left: 200px;
+            padding: 30px;
+            max-width: calc(100% - 200px);
         }
         
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .lesson-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 24px;
+            max-width: 1000px;
         }
         
-        .hero .subtitle {
-            font-size: 1.5rem;
-            opacity: 0.9;
-        }
-        
-        .turtle-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 30px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-radius: 50%;
+        .lesson-header {
             display: flex;
             align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+        
+        .lesson-number {
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            font-size: 60px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-        
-        .section {
-            padding: 60px 0;
-        }
-        
-        .section-card {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .section-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        
-        .section-number {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border-radius: 12px;
+            font-size: 1.2rem;
             font-weight: bold;
-            font-size: 1.5rem;
-            margin-right: 15px;
+            margin-right: 16px;
         }
         
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .lesson-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
         }
+        
+        .content-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .content-list li {
+            padding: 10px 0 10px 28px;
+            position: relative;
+            font-size: 1rem;
+        }
+        
+        .content-list li::before {
+            content: '➊';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .content-list li:nth-child(2)::before { content: '➋'; }
+        .content-list li:nth-child(3)::before { content: '➌'; }
+        .content-list li:nth-child(4)::before { content: '➍'; }
+        .content-list li:nth-child(5)::before { content: '➎'; }
+        
+        .code-container {
+            background: var(--bg-code);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 16px 0;
+        }
+        
+        .code-header {
+            background: #0f172a;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .code-lang { color: #94a3b8; font-size: 0.85rem; font-family: 'Consolas', monospace; }
+        
+        .code-copy {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        
+        .code-copy:hover { background: var(--primary-light); }
         
         .code-block {
-            background: #0f172a;
-            border-radius: 12px;
             padding: 20px;
-            margin: 15px 0;
             overflow-x: auto;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin: 0;
         }
         
         .code-block pre {
@@ -106,330 +214,269 @@
             color: #e2e8f0;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 0.95rem;
+            line-height: 1.7;
         }
         
         .code-block .keyword { color: #c084fc; }
+        .code-block .function { color: #60a5fa; }
         .code-block .string { color: #34d399; }
         .code-block .number { color: #f472b6; }
-        .code-block .comment { color: #64748b; }
         
-        .feature-list {
-            list-style: none;
-            padding: 0;
+        .tip-box {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 16px 0;
         }
         
-        .feature-list li {
-            padding: 12px 0;
-            padding-left: 35px;
-            position: relative;
-            font-size: 1.1rem;
+        .tip-box i { color: var(--warning); margin-right: 8px; }
+        
+        .success-box {
+            background: #ecfdf5;
+            border-left: 4px solid var(--secondary);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 16px 0;
         }
         
-        .feature-list li::before {
-            content: '★';
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-size: 1.2rem;
+        .success-box i { color: var(--secondary); margin-right: 8px; }
+        
+        .cover-page {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
         }
         
-        .color-palette {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-        
-        .color-box {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .kaleidoscope-preview {
-            width: 100%;
-            max-width: 400px;
-            height: 300px;
-            margin: 20px auto;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
-            border-radius: 20px;
+        .cover-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
+            font-size: 50px;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
         }
         
-        .spiral {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #ff6b6b);
-            animation: spin 10s linear infinite;
-        }
+        .cover-title { font-size: 2.2rem; font-weight: 800; color: #1e3a8a; margin-bottom: 12px; }
+        .cover-subtitle { font-size: 1.3rem; color: #475569; margin-bottom: 24px; }
         
-        @keyframes spin {
-            from { transform: rotate(0deg) scale(0.5); }
-            to { transform: rotate(360deg) scale(1); }
-        }
-        
-        .nav-buttons {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-        
-        .nav-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .btn-download {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .btn-ppt {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        .nav-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        .target-audience {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
+        .cover-tag {
+            background: white;
             padding: 8px 20px;
             border-radius: 20px;
-            margin-top: 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin: 5px;
         }
         
-        .challenge-box {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2));
-            border: 2px solid var(--accent);
-            border-radius: 15px;
-            padding: 25px;
+        .exercise-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px dashed #38bdf8;
+            padding: 20px;
+            border-radius: var(--radius);
             margin: 20px 0;
         }
         
-        .param-item {
+        .exercise-box h4 { color: #0369a1; margin-bottom: 12px; }
+        .exercise-box h4 i { color: #38bdf8; margin-right: 8px; }
+        
+        .page-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            margin-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .page-btn-primary { background: var(--primary); color: white; }
+        .page-btn-primary:hover { background: #1d4ed8; }
+        .page-btn-secondary { background: #e2e8f0; color: #475569; }
+        .page-btn-secondary:hover { background: #cbd5e1; }
+        
+        .color-grid { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+        .color-chip {
             display: flex;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
         
-        .param-item:last-child {
-            border-bottom: none;
+        @media (max-width: 768px) {
+            .page-nav { display: none; }
+            .main-content { margin-left: 0; max-width: 100%; padding: 20px; }
         }
         
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: rgba(0,0,0,0.3);
-            margin-top: 60px;
-        }
-        
-        .page-flow {
-            counter-reset: section;
-        }
-        
-        .page-flow .section-card {
-            counter-increment: section;
-        }
-        
-        .page-flow .section-card::before {
-            content: counter(section);
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        .fade-in { animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <!-- 封面 -->
-    <section class="hero">
-        <div class="container">
-            <div class="turtle-icon">🐢</div>
-            <h1>神奇的万花筒</h1>
-            <p class="subtitle">用Python画出炫彩图案 —— Python海龟画图进阶课程</p>
-            <div class="target-audience">
-                <i class="bi bi-people"></i> 适合年级：小学3～6年级
+    <nav class="top-nav">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-turtle text-white me-2" style="font-size: 1.3rem;"></i>
+                    <span class="text-white fw-bold" style="font-size: 1.1rem;">Python海龟画图课程</span>
+                </div>
+                <div>
+                    <span class="text-white-50">第 <span id="currentPage">1</span> / 15 页</span>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar-custom" id="progressBar" style="width: 6.67%;"></div>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <div class="container page-flow">
-        <!-- 第2页：课程目标 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">2</span>今天我们要学什么？</h2>
-                <ul class="feature-list">
-                    <li>回顾海龟画图的基本命令</li>
-                    <li>学会用for循环重复画图</li>
-                    <li>学会用random模块让颜色随机变化</li>
-                    <li>学会用旋转和大小变化创造炫酷效果</li>
-                    <li>自己动手设计独一无二的万花筒图案！</li>
-                </ul>
-            </div>
-        </section>
+    <nav class="page-nav" id="pageNav"></nav>
 
-        <!-- 第3页：导入 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">3</span>你玩过万花筒吗？</h2>
-                <p style="font-size: 1.2rem; line-height: 1.8;">
-                    万花筒是一种光学玩具，里面有多彩的图案。<br>
-                    转动万花筒，图案会不断变化，非常漂亮！<br><br>
-                    <strong>今天我们就要用Python来创造数字万花筒！</strong>
-                </p>
-                <div class="kaleidoscope-preview">
-                    <div class="spiral"></div>
-                </div>
-            </div>
-        </section>
+    <main class="main-content" id="mainContent"></main>
 
-        <!-- 第4页：准备工作 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">4</span>让我们开始吧！</h2>
-                <p style="font-size: 1.1rem;">打开Python（IDLE或Thonny），导入需要的模块</p>
-                <div class="code-block">
-<pre><span class="keyword">import</span> turtle
+    <script>
+        const lessons = [
+            {
+                type: 'cover',
+                title: '神奇的万花筒',
+                subtitle: '用Python画出炫彩图案',
+                info: ['Python海龟画图进阶课程', '适合年级：小学3～6年级']
+            },
+            {
+                type: 'content',
+                number: 2,
+                title: '今天我们要学什么？',
+                content: [
+                    '回顾海龟画图的基本命令',
+                    '学会用for循环重复画图',
+                    '学会用random模块让颜色随机变化',
+                    '学会用旋转和大小变化创造炫酷效果',
+                    '自己动手设计独一无二的万花筒图案！'
+                ]
+            },
+            {
+                type: 'content',
+                number: 3,
+                title: '你玩过万花筒吗？',
+                content: [
+                    '万花筒是一种光学玩具，里面有多彩的图案',
+                    '转动万花筒，图案会不断变化，非常漂亮',
+                    '',
+                    '今天我们就要用Python来创造数字万花筒！'
+                ],
+                tip: '万花筒的原理是光的反射，让我们用代码来实现类似的魔法效果！'
+            },
+            {
+                type: 'code',
+                number: 4,
+                title: '让我们开始吧！',
+                intro: '打开Python（IDLE或Thonny），导入需要的模块',
+                code: `<span class="keyword">import</span> turtle
 <span class="keyword">import</span> random
 
-t = turtle.Turtle()
-t.<span class="keyword">speed</span>(<span class="number">0</span>)
+t = turtle.<span class="function">Turtle</span>()
+t.<span class="function">speed</span>(<span class="number">0</span>)
 turtle.bgcolor(<span class="string">"black"</span>)
-t.pensize(<span class="number">2</span>)</pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第5页：准备颜色列表 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">5</span>五颜六色的画笔</h2>
-                <p style="font-size: 1.1rem;">创建一个颜色列表，让程序可以从里面随机挑选颜色</p>
-                <div class="code-block">
-<pre>colors = [<span class="string">"red"</span>, <span class="string">"orange"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>, 
-          <span class="string">"purple"</span>, <span class="string">"pink"</span>, <span class="string">"cyan"</span>, <span class="string">"magenta"</span>]</pre>
-                </div>
-                <div class="color-palette">
-                    <div class="color-box" style="background: #ef4444; color: white;">red</div>
-                    <div class="color-box" style="background: #f97316; color: white;">orange</div>
-                    <div class="color-box" style="background: #eab308; color: black;">yellow</div>
-                    <div class="color-box" style="background: #22c55e; color: white;">green</div>
-                    <div class="color-box" style="background: #3b82f6; color: white;">blue</div>
-                    <div class="color-box" style="background: #a855f7; color: white;">purple</div>
-                    <div class="color-box" style="background: #ec4899; color: white;">pink</div>
-                    <div class="color-box" style="background: #06b6d4; color: white;">cyan</div>
-                    <div class="color-box" style="background: #d946ef; color: white;">magenta</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第6页：画正八边形 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">6</span>先画一个简单的图形</h2>
-                <p style="font-size: 1.1rem;">正八边形有8条边，每次右转45度，边长100像素</p>
-                <div class="code-block">
-<pre><span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
-    t.forward(<span class="number">100</span>)
-    t.right(<span class="number">45</span>)</pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第7页：让颜色随机变化 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">7</span>给图形穿上彩色外衣</h2>
-                <p style="font-size: 1.1rem;">每次画边之前，从颜色列表中随机选一个颜色</p>
-                <div class="code-block">
-<pre><span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
-    t.color(random.choice(colors))
-    t.forward(<span class="number">100</span>)
-    t.right(<span class="number">45</span>)</pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第8页：旋转整体图案 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">8</span>转起来！变成万花筒</h2>
-                <p style="font-size: 1.1rem;">画完一个八边形后，将海龟旋转一个小角度（比如10度），再画下一个八边形</p>
-                <div class="code-block">
-<pre><span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">36</span>):
-    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
-        t.color(random.choice(colors))
-        t.forward(<span class="number">100</span>)
-        t.right(<span class="number">45</span>)
-    t.right(<span class="number">10</span>)</pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第9页：改变大小 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">9</span>让图案有层次感</h2>
-                <p style="font-size: 1.1rem;">每次画完一圈，把边长增加一点点，形成螺旋上升的效果</p>
-                <div class="code-block">
-<pre>size = <span class="number">50</span>
-<span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">30</span>):
-    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">8</span>):
-        t.color(random.choice(colors))
-        t.forward(size)
-        t.right(<span class="number">45</span>)
-    t.right(<span class="number">15</span>)
-    size = size + <span class="number">3</span></pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第10页：完整代码 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">10</span>一起来运行吧！</h2>
-                <p style="font-size: 1.1rem;">这是我们这节课的最终代码（可以直接复制运行）</p>
-                <div class="code-block">
-<pre><span class="keyword">import</span> turtle
+t.pensize(<span class="number">2</span>)`,
+                explanation: [
+                    'import turtle - 导入海龟画图模块',
+                    'import random - 导入随机模块（后面用来选颜色）',
+                    't.speed(0) - 设置最快速度',
+                    'turtle.bgcolor("black") - 设置黑色背景',
+                    't.pensize(2) - 设置画笔粗细'
+                ]
+            },
+            {
+                type: 'code',
+                number: 5,
+                title: '五颜六色的画笔',
+                intro: '创建一个颜色列表，让程序可以随机挑选颜色',
+                code: `colors = [<span class="string">"red"</span>, <span class="string">"orange"</span>, <span class="string">"yellow"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>, 
+          <span class="string">"purple"</span>, <span class="string">"pink"</span>, <span class="string">"cyan"</span>, <span class="string">"magenta"</span>]`,
+                colors: ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'cyan', 'magenta']
+            },
+            {
+                type: 'code',
+                number: 6,
+                title: '先画一个简单的图形',
+                intro: '正八边形有8条边，每次右转45度，边长100像素',
+                code: `<span class="keyword">for</span> side <span class="keyword">in</span> <span class="function">range</span>(<span class="number">8</span>):
+    t.<span class="function">forward</span>(<span class="number">100</span>)
+    t.<span class="function">right</span>(<span class="number">45</span>)`,
+                tip: 'for循环，让代码重复执行，8次就是画一个八边形！'
+            },
+            {
+                type: 'code',
+                number: 7,
+                title: '给图形穿上彩色外衣',
+                intro: '每次画边之前，从颜色列表中随机选一个颜色',
+                code: `<span class="keyword">for</span> side <span class="keyword">in</span> <span class="function">range</span>(<span class="number">8</span>):
+    t.<span class="function">color</span>(random.<span class="function">choice</span>(colors))
+    t.<span class="function">forward</span>(<span class="number">100</span>)
+    t.<span class="function">right</span>(<span class="number">45</span>)`,
+                tip: 'random.choice(colors) 会从列表中随机选择一个颜色'
+            },
+            {
+                type: 'code',
+                number: 8,
+                title: '转起来！变成万花筒',
+                intro: '画完一个八边形后，将海龟旋转一个小角度（比如10度），再画下一个八边形',
+                code: `<span class="keyword">for</span> times <span class="keyword">in</span> <span class="function">range</span>(<span class="number">36</span>):
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="function">range</span>(<span class="number">8</span>):
+        t.<span class="function">color</span>(random.<span class="function">choice</span>(colors))
+        t.<span class="function">forward</span>(<span class="number">100</span>)
+        t.<span class="function">right</span>(<span class="number">45</span>)
+    t.<span class="function">right</span>(<span class="number">10</span>)`,
+                tip: '外层循环36次，每次旋转10度，36×10=360°，正好转一圈！'
+            },
+            {
+                type: 'code',
+                number: 9,
+                title: '让图案有层次感',
+                intro: '每次画完一圈，把边长增加一点点，形成螺旋上升的效果',
+                code: `size = <span class="number">50</span>
+<span class="keyword">for</span> times <span class="keyword">in</span> <span class="function">range</span>(<span class="number">30</span>):
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="function">range</span>(<span class="number">8</span>):
+        t.<span class="function">color</span>(random.<span class="function">choice</span>(colors))
+        t.<span class="function">forward</span>(size)
+        t.<span class="function">right</span>(<span class="number">45</span>)
+    t.<span class="function">right</span>(<span class="number">15</span>)
+    size = size + <span class="number">3</span>`,
+                tip: 'size = size + 3 每次增加3像素，越画越大！'
+            },
+            {
+                type: 'code',
+                number: 10,
+                title: '一起来运行吧！',
+                intro: '这是我们这节课的最终代码（可以直接复制运行）',
+                code: `<span class="keyword">import</span> turtle
 <span class="keyword">import</span> random
 
-t = turtle.Turtle()
-t.<span class="keyword">speed</span>(<span class="number">0</span>)
+t = turtle.<span class="function">Turtle</span>()
+t.<span class="function">speed</span>(<span class="number">0</span>)
 turtle.bgcolor(<span class="string">"black"</span>)
 t.pensize(<span class="number">2</span>)
 
@@ -437,122 +484,216 @@ colors = [<span class="string">"red"</span>, <span class="string">"orange"</span
           <span class="string">"purple"</span>, <span class="string">"pink"</span>, <span class="string">"cyan"</span>, <span class="string">"magenta"</span>]
 
 size = <span class="number">20</span>
-<span class="keyword">for</span> times <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">72</span>):
-    t.color(random.choice(colors))
-    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="keyword">range</span>(<span class="number">30</span>):
-        t.forward(size)
-        t.right(<span class="number">91</span>)
+<span class="keyword">for</span> times <span class="keyword">in</span> <span class="function">range</span>(<span class="number">72</span>):
+    t.<span class="function">color</span>(random.<span class="function">choice</span>(colors))
+    <span class="keyword">for</span> side <span class="keyword">in</span> <span class="function">range</span>(<span class="number">30</span>):
+        t.<span class="function">forward</span>(size)
+        t.<span class="function">right</span>(<span class="number">91</span>)
         size += <span class="number">1</span>
-    t.right(<span class="number">5</span>)
+    t.<span class="function">right</span>(<span class="number">5</span>)
 
-t.hideturtle()
-turtle.done()</pre>
-                </div>
-            </div>
-        </section>
+t.<span class="function">hideturtle</span>()
+turtle.<span class="function">done</span>()`,
+                success: '复制这段代码到Python中运行，就能看到漂亮的万花筒图案！'
+            },
+            {
+                type: 'exercise',
+                number: 11,
+                title: '变身小小艺术家',
+                items: [
+                    { param: '外循环次数', value: '72 → 36 或 120' },
+                    { param: '内循环次数', value: '30 → 10 或 50' },
+                    { param: '旋转角度', value: '5 → 10 或 2' },
+                    { param: '颜色列表', value: '添加自己喜欢的颜色' }
+                ],
+                tip: '和同桌比一比，谁画出的图案最漂亮！'
+            },
+            {
+                type: 'content',
+                number: 12,
+                title: '展示你的万花筒',
+                content: [
+                    '运行你的程序，保存截图',
+                    '',
+                    '向大家介绍你的作品：',
+                    '用了哪些颜色？',
+                    '改了哪些参数？',
+                    '',
+                    '说说你最喜欢的地方'
+                ]
+            },
+            {
+                type: 'summary',
+                number: 13,
+                title: '今天我们学会了……',
+                items: [
+                    '用循环画出重复图案 - for循环让代码更简洁',
+                    '用随机数让颜色多变 - random.choice() 随机选颜色',
+                    '通过旋转和大小变化创造动态效果 - 角度+size变化'
+                ],
+                highlight: '编程不仅能解决问题，还能创作艺术！'
+            },
+            {
+                type: 'homework',
+                number: 14,
+                title: '课后可以继续探索',
+                items: [
+                    { icon: '🌈', title: '颜色渐变', desc: '试试不用随机，让颜色按顺序变化（用列表索引）' },
+                    { icon: '🔷', title: '图形变形', desc: '把正八边形改成五边形或圆形，会是什么效果？' },
+                    { icon: '📝', title: '家庭作业', desc: '创作一幅"送给妈妈的万花筒"或"星空万花筒"' }
+                ]
+            },
+            {
+                type: 'cover',
+                title: '谢谢大家！',
+                subtitle: '期待你们的创意作品',
+                info: ['Q&A环节']
+            }
+        ];
 
-        <!-- 第11页：互动活动 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">11</span>变身小小艺术家</h2>
-                <div class="challenge-box">
-                    <h4>修改下面这些参数，看看图案有什么变化：</h4>
-                    <div class="param-item">
-                        <strong>外循环次数：</strong> 72 → 36 或 120
-                    </div>
-                    <div class="param-item">
-                        <strong>内循环次数：</strong> 30 → 10 或 50
-                    </div>
-                    <div class="param-item">
-                        <strong>旋转角度：</strong> 5 → 10 或 2
-                    </div>
-                    <div class="param-item">
-                        <strong>颜色列表：</strong> 添加自己喜欢的颜色
-                    </div>
-                </div>
-                <p style="font-size: 1.1rem;">和同桌比一比，谁画出的图案最漂亮！</p>
-            </div>
-        </section>
+        let currentLesson = 0;
 
-        <!-- 第12页：作品展示 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">12</span>展示你的万花筒</h2>
-                <ul class="feature-list">
-                    <li>运行你的程序，保存截图</li>
-                    <li>向大家介绍你的作品：用了哪些颜色？改了哪些参数？</li>
-                    <li>说说你最喜欢的地方</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 第13页：课程总结 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">13</span>今天我们学会了……</h2>
-                <ul class="feature-list">
-                    <li>用循环画出重复图案</li>
-                    <li>用随机数让颜色多变</li>
-                    <li>通过旋转和大小变化创造动态效果</li>
-                    <li><strong>编程不仅能解决问题，还能创作艺术！</strong></li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 第14页：课后作业 -->
-        <section class="section">
-            <div class="section-card">
-                <h2 class="section-title"><span class="section-number">14</span>课后可以继续探索</h2>
-                <div class="challenge-box">
-                    <h4>🌈 颜色渐变</h4>
-                    <p>试试不用随机，而是让颜色按顺序变化（用列表索引）</p>
-                    
-                    <h4>🔷 图形变形</h4>
-                    <p>把正八边形改成五边形或圆形，会是什么效果？</p>
-                    
-                    <h4>📝 家庭作业</h4>
-                    <p>修改代码，创作一幅"送给妈妈的万花筒"或"星空万花筒"</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 第15页：结束页 -->
-        <section class="section">
-            <div class="section-card" style="text-align: center;">
-                <div class="turtle-icon" style="width: 100px; height: 100px; font-size: 50px; margin: 0 auto 20px;">🐢</div>
-                <h2 class="section-title">谢谢大家！</h2>
-                <p class="subtitle" style="font-size: 1.3rem;">期待你们的创意作品</p>
-                <div style="margin-top: 30px;">
-                    <span class="badge bg-light text-dark fs-6 me-2">Q&A环节</span>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>🎨 Python海龟画图进阶课程 | 乐造AI</p>
-        </div>
-    </footer>
-
-    <div class="nav-buttons">
-        <button class="nav-btn btn-ppt" onclick="downloadPPT()" title="下载PPT">
-            <i class="bi bi-file-earmark-ppt"></i>
-        </button>
-        <button class="nav-btn btn-download" onclick="downloadHTML()" title="下载网页">
-            <i class="bi bi-download"></i>
-        </button>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function downloadHTML() {
-            alert('网页已打开，可以直接保存为HTML文件！\n\n方法：Ctrl+S 保存网页');
+        function init() {
+            renderNav();
+            renderLesson(currentLesson);
         }
-        
-        function downloadPPT() {
-            alert('正在生成PPT，请稍候...\n\n如需PPT，可使用以下工具：\n1. python-pptx 库\n2. WPS/Office 打开网页后另存为PPT\n3. 使用在线转换工具');
+
+        function renderNav() {
+            const nav = document.getElementById('pageNav');
+            nav.innerHTML = lessons.map((lesson, index) => {
+                const title = lesson.title || `第${index + 1}页`;
+                return `<a class="page-nav-item ${index === currentLesson ? 'active' : ''}" onclick="goToLesson(${index})">
+                    <span class="page-nav-number">${index + 1}</span>
+                    <span>${title.substring(0, 12)}${title.length > 12 ? '...' : ''}</span>
+                </a>`;
+            }).join('');
         }
+
+        function renderLesson(index) {
+            const lesson = lessons[index];
+            const main = document.getElementById('mainContent');
+            
+            document.querySelectorAll('.page-nav-item').forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+            
+            const progress = ((index + 1) / lessons.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentPage').innerText = index + 1;
+
+            let html = '';
+
+            switch(lesson.type) {
+                case 'cover':
+                    html = `<div class="lesson-card">
+                        <div class="cover-page">
+                            <div class="cover-icon">🐢</div>
+                            <h1 class="cover-title">${lesson.title}</h1>
+                            <p class="cover-subtitle">${lesson.subtitle}</p>
+                            <div>
+                                ${lesson.info.map(i => `<span class="cover-tag">${i}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+                case 'content':
+                    html = `<div class="lesson-card fade-in">
+                        <div class="lesson-header">
+                            <span class="lesson-number">${lesson.number}</span>
+                            <h2 class="lesson-title">${lesson.title}</h2>
+                        </div>
+                        <ul class="content-list">
+                            ${lesson.content.filter(c => c).map(c => `<li>${c}</li>`).join('')}
+                        </ul>
+                        ${lesson.tip ? `<div class="tip-box"><i class="bi bi-lightbulb"></i>${lesson.tip}</div>` : ''}
+                    </div>`;
+                    break;
+                case 'code':
+                    let extra = '';
+                    if (lesson.tip) extra += `<div class="tip-box"><i class="bi bi-lightbulb"></i>${lesson.tip}</div>`;
+                    if (lesson.success) extra += `<div class="success-box"><i class="bi bi-check-circle"></i>${lesson.success}</div>`;
+                    if (lesson.explanation) {
+                        extra += `<div class="mt-3"><strong><i class="bi bi-info-circle"></i>代码解释：</strong></div><ul class="content-list">${lesson.explanation.map(e => `<li>${e}</li>`).join('')}</ul>`;
+                    }
+                    if (lesson.colors) {
+                        extra += `<div class="mt-3"><strong><i class="bi bi-palette"></i>颜色展示：</strong></div><div class="color-grid">${lesson.colors.map(c => `<span class="color-chip" style="background:${c};color:${c === 'yellow' ? '#333' : 'white'}">${c}</span>`).join('')}</div>`;
+                    }
+                    html = `<div class="lesson-card fade-in">
+                        <div class="lesson-header">
+                            <span class="lesson-number">${lesson.number}</span>
+                            <h2 class="lesson-title">${lesson.title}</h2>
+                        </div>
+                        ${lesson.intro ? `<p style="font-size:1.1rem;color:#475569;margin-bottom:16px;">${lesson.intro}</p>` : ''}
+                        <div class="code-container">
+                            <div class="code-header">
+                                <span class="code-lang"><i class="bi bi-code-slash"></i> Python</span>
+                                <button class="code-copy" onclick="copyCode(this)"><i class="bi bi-clipboard"></i> 复制代码</button>
+                            </div>
+                            <div class="code-block"><pre>${lesson.code}</pre></div>
+                        </div>
+                        ${extra}
+                    </div>`;
+                    break;
+                case 'exercise':
+                    html = `<div class="lesson-card fade-in">
+                        <div class="lesson-header">
+                            <span class="lesson-number">${lesson.number}</span>
+                            <h2 class="lesson-title">${lesson.title}</h2>
+                        </div>
+                        <div class="exercise-box">
+                            <h4><i class="bi bi-pencil"></i>修改下面这些参数，看看图案有什么变化：</h4>
+                            <table class="table mt-3">
+                                <tbody>${lesson.items.map(item => `<tr><td style="width:140px;font-weight:600;">${item.param}</td><td><code>${item.value}</code></td></tr>`).join('')}</tbody>
+                            </table>
+                        </div>
+                        ${lesson.tip ? `<div class="tip-box"><i class="bi bi-people"></i>${lesson.tip}</div>` : ''}
+                    </div>`;
+                    break;
+                case 'summary':
+                    html = `<div class="lesson-card fade-in">
+                        <div class="lesson-header">
+                            <span class="lesson-number">${lesson.number}</span>
+                            <h2 class="lesson-title">${lesson.title}</h2>
+                        </div>
+                        <ul class="content-list">${lesson.items.map(item => `<li>${item}</li>`).join('')}</ul>
+                        <div class="success-box mt-3" style="font-size:1.1rem;font-weight:600;"><i class="bi bi-stars"></i> ${lesson.highlight}</div>
+                    </div>`;
+                    break;
+                case 'homework':
+                    html = `<div class="lesson-card fade-in">
+                        <div class="lesson-header">
+                            <span class="lesson-number">${lesson.number}</span>
+                            <h2 class="lesson-title">${lesson.title}</h2>
+                        </div>
+                        <div class="row">${lesson.items.map(item => `<div class="col-md-4 mb-3"><div class="p-4" style="background:#f8fafc;border-radius:12px;height:100%;"><div style="font-size:2rem;margin-bottom:8px;">${item.icon}</div><h5 style="font-weight:600;">${item.title}</h5><p style="color:#64748b;font-size:0.95rem;margin:0;">${item.desc}</p></div></div>`).join('')}</div>
+                    </div>`;
+                    break;
+            }
+
+            const prev = index > 0 ? `<a class="page-btn page-btn-secondary" onclick="goToLesson(${index - 1})"><i class="bi bi-arrow-left"></i> 上一页</a>` : '';
+            const next = index < lessons.length - 1 ? `<a class="page-btn page-btn-primary" onclick="goToLesson(${index + 1})">下一页 <i class="bi bi-arrow-right"></i></a>` : '';
+            
+            html += `<div class="lesson-card"><div class="page-footer">${prev}<span></span>${next}</div></div>`;
+            
+            main.innerHTML = html;
+            main.classList.add('fade-in');
+            setTimeout(() => main.classList.remove('fade-in'), 400);
+        }
+
+        function goToLesson(index) {
+            currentLesson = index;
+            renderLesson(index);
+        }
+
+        function copyCode(btn) {
+            const code = btn.closest('.code-container').querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> 已复制！';
+                setTimeout(() => { btn.innerHTML = '<i class="bi bi-clipboard"></i> 复制代码'; }, 2000);
+            });
+        }
+
+        init();
     </script>
 </body>
 </html>
